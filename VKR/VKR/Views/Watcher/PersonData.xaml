@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 x:Class="VKR.Views.Watcher.PersonData">
+
+	<ContentPage.Content>
+		<StackLayout Orientation="Vertical"
+								 Spacing="5">
+			<StackLayout Orientation="Horizontal">
+				<Label Text="ФИО:" Margin="20,0,0,0"/>
+				<Label Text="{Binding FIO}" FontAttributes="Bold" Margin="0,0,20,0" HorizontalOptions="EndAndExpand"/>
+			</StackLayout>
+			<StackLayout Orientation="Horizontal">
+				<Label Text="Должность" Margin="20,0,0,0"/>
+				<Label Text="{Binding Position}" Margin="0,0,20,0" HorizontalOptions="EndAndExpand"/>
+			</StackLayout>
+			<StackLayout Orientation="Horizontal" MinimumHeightRequest="200">
+				<Label Text="Рабочая группа:" Margin="20,0,0,0" MinimumWidthRequest="200" WidthRequest="120"/>
+				<Label Text="{Binding WorkGroup}" Margin="0,0,20,0" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End"/>
+			</StackLayout>
+			<StackLayout Orientation="Horizontal">
+				<Label Text="Количество пропусков:" Margin="20,0,0,0"/>
+				<Label Text="{Binding NumberOfAbsence}" Margin="0,0,20,0" HorizontalOptions="EndAndExpand"/>
+			</StackLayout>
+			<StackLayout Orientation="Horizontal">
+				<Label Text="Время пропусков:" Margin="20,0,0,0"/>
+				<Label Text="{Binding SumTimeOfAbsence}" Margin="0,0,20,0" HorizontalOptions="EndAndExpand"/>
+			</StackLayout>
+			
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="40" />
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="95" />
+					<ColumnDefinition Width="95" />
+					<ColumnDefinition Width="95" />
+					<ColumnDefinition Width="95" />
+				</Grid.ColumnDefinitions>
+				<Label Text="Дата"
+							HorizontalOptions="Center"
+							VerticalOptions="Center" />
+				<Label Grid.Column ="1"
+							Text="Начало"
+							HorizontalOptions="Center"
+							VerticalOptions="Center" />
+				<Label Grid.Column ="2"
+							Text="Конец"
+							HorizontalOptions="Center"
+							VerticalOptions="Center" />
+				<Label Grid.Column ="3"
+							Text="Итого"
+							HorizontalOptions="Center"
+							VerticalOptions="Center" />
+			</Grid>
+			<CollectionView SelectionMode="Single"
+				SelectionChanged="CollectionView_SelectionChanged"
+				x:Name="collView">
+				<CollectionView.ItemTemplate>
+					<DataTemplate>
+						<Grid>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="40" />
+							</Grid.RowDefinitions>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="95" />
+								<ColumnDefinition Width="95" />
+								<ColumnDefinition Width="95" />
+								<ColumnDefinition Width="95" />
+							</Grid.ColumnDefinitions>
+							<Label Text="{Binding date}"
+								HorizontalOptions="Center"
+								VerticalOptions="Center" />
+							<Label Grid.Column ="1"
+								Text="{Binding start_time}"
+								HorizontalOptions="Center"
+								VerticalOptions="Center" />
+							<Label Grid.Column ="2"
+								Text="{Binding end_time}"
+								HorizontalOptions="Center"
+								VerticalOptions="Center" />
+							<Label Grid.Column ="3"
+								Text="{Binding skip_time}"
+								HorizontalOptions="Center"
+								VerticalOptions="Center" />
+						</Grid>
+					</DataTemplate>
+				</CollectionView.ItemTemplate>
+			</CollectionView>
+		</StackLayout>
+	</ContentPage.Content>
+
+</ContentPage>

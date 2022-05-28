@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ViewModels="clr-namespace:VKR.ViewModels.Admin"
+             x:Class="VKR.Views.Admin.MapPage"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             x:DataType="ViewModels:MapPageViewModel"
+             Title="Карта"
+             xmlns:local="clr-namespace:VKR.ViewModels.Admin">
+
+    <ContentPage.Content>
+        <StackLayout>
+            <maps:Map
+				x:Name="MyMap"
+				IsShowingUser="true"
+				MapType="Street" />
+            <StackLayout Orientation="Horizontal" Margin="10">
+                <Button Text="Add pin"
+				Command="{Binding AddPin}"
+				HorizontalOptions="StartAndExpand"
+					x:Name="button1"/>
+                <Button Text="Change pin"
+				Command="{Binding ChangePin}"
+					HorizontalOptions="CenterAndExpand"/>
+                <Button Text="Remove pin"
+				Command="{Binding DeletePin}"
+					HorizontalOptions="EndAndExpand"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

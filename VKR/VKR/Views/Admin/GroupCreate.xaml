@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VKR.Views.Admin.GroupCreate"
+             Title="Имя группы">
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout Margin="20">
+                <Editor Placeholder="Наименование рабочей группы" Text="{Binding NameOfGroup}" HeightRequest="80"/>
+
+                <Grid ColumnDefinitions="*,*">
+                    <Button Text="Сохранить" Clicked="OnSaveButtonClicked"/>
+                    <Button Grid.Column="1" Text="Удалить" Clicked="OnDeleteButtonClicked" x:Name="dButton"/>
+                </Grid>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

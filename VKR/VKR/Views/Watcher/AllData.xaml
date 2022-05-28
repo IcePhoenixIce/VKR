@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VKR.Views.Watcher.AllData">
+    <CollectionView SelectionMode="Single"
+					SelectionChanged="OnCollectionViewSelectionChanged"
+                    x:Name="collview">
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+                <StackLayout Orientation="Vertical"
+							 Spacing="5">
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="ФИО:" Margin="20,0,0,0"/>
+                        <Label Text="{Binding FIO}" FontAttributes="Bold" Margin="0,0,20,0" HorizontalOptions="EndAndExpand"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Должность" Margin="20,0,0,0"/>
+                        <Label Text="{Binding Position}" Margin="0,0,20,0" HorizontalOptions="EndAndExpand"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" MinimumHeightRequest="200">
+                        <Label Text="Рабочая группа:" Margin="20,0,0,0" MinimumWidthRequest="200" WidthRequest="120"/>
+                        <Label Text="{Binding WorkGroup}" Margin="0,0,20,0" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Количество пропусков:" Margin="20,0,0,0"/>
+                        <Label Text="{Binding NumberOfAbsence}" Margin="0,0,20,0" HorizontalOptions="EndAndExpand"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Время пропусков:" Margin="20,0,0,0"/>
+                        <Label Text="{Binding SumTimeOfAbsence}" Margin="0,0,20,50" HorizontalOptions="EndAndExpand"/>
+                    </StackLayout>
+                </StackLayout>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+
+    </CollectionView>
+</ContentPage>

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             Shell.NavBarIsVisible="false"
+
+             xmlns:local="clr-namespace:VKR.ViewModels"
+             x:Class="VKR.Views.Login">
+
+    <ContentPage.BindingContext>
+        <local:LoginViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <StackLayout Orientation="Vertical">
+            <Entry Placeholder="Login" WidthRequest="400" Margin="40,100,40,20" VerticalOptions="Center" HorizontalOptions="StartAndExpand" 
+                   Text="{Binding Login}"/>
+            <Entry Placeholder="Password" IsPassword="True" WidthRequest="400" Margin="40" VerticalOptions="Center" HorizontalOptions="StartAndExpand"
+                   Text="{Binding Password}"/>
+            <Button Text="Log In" Margin="20" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"
+                    Command="{Binding LoginCommand}"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="VKR.Models.Admin.Shedule">
+    <Position X="3.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAgAAAAAAAAAAAECAAAEgA=</HashCode>
+      <FileName>Models\Admin\Group.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VKR.Models.Admin.Employee">
+    <Position X="5.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAgAAAAAAAAAAAAAAACAAAQBAAAAgA=</HashCode>
+      <FileName>Models\Admin\Group.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VKR.Models.Admin.Group" BaseTypeListCollapsed="true">
+    <Position X="1.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAEAAAAAgAAIACCAAAAgAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>Models\Admin\Group.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="VKR.Models.Watcher.Worker_skip">
+    <Position X="11.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAAAIAAACAAAAEAAAAAAAAAAAEQAAAAA=</HashCode>
+      <FileName>Models\Watcher\WatchWorker.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VKR.Models.Watcher.WatchWorker" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>kgAEAAAAAAEAgQAgIABAgAAEgAAABAAAAAQAAIAABgA=</HashCode>
+      <FileName>Models\Watcher\WatchWorker.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="VKR.Models.Marker">
+    <Position X="7.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAIAAAAACAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Marker.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VKR.Data.DataBase">
+    <Position X="15.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAYAAAABAABlAAQECAAQCRQAAAAAAAgAQhA=</HashCode>
+      <FileName>Data\DataBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="VKR.Models.Admin.WeekDay">
+    <Position X="13.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAICAAAAAgAAAgAAAAAAAAAAAAAAAAAAAMAAAAAA=</HashCode>
+      <FileName>Models\Admin\Group.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

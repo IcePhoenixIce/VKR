@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 x:Class="VKR.Views.Admin.TimeCreate">
+	<ContentPage.Content>
+		<StackLayout Margin="20,0">
+            <Picker Title="День недели:" x:Name="picker">
+                <Picker.Items>
+                    <x:String>Воскресенье</x:String>
+                    <x:String>Понедельник</x:String>
+                    <x:String>Вторник</x:String>
+                    <x:String>Среда</x:String>
+                    <x:String>Четверг</x:String>
+                    <x:String>Пятница</x:String>
+                    <x:String>Суббота</x:String>
+                </Picker.Items>
+            </Picker>
+            <StackLayout Orientation="Horizontal" Spacing="10">
+                <Label Text="Время начала" FontSize="Large"/>
+                <TimePicker Time="{Binding time_start}" HorizontalOptions="EndAndExpand"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" Spacing="10">
+                <Label Text="Время окончания" FontSize="Large"/>
+                <TimePicker Time="{Binding time_end}" HorizontalOptions="EndAndExpand"/>
+            </StackLayout>
+            <Button Text="Сохранить" Clicked="SaveButtonClicked"/>
+            <Button Text="Удалить" Clicked="DeleteButtonClicked" x:Name="deleteb"/>
+        </StackLayout>
+	</ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VKR.Views.Admin.EmployeerCreate">
+    <ContentPage.Content>
+        <StackLayout Margin="20,0">
+            <Entry Text="{Binding FIO}" Placeholder="ФИО" HorizontalOptions="StartAndExpand" WidthRequest="350"/>
+            <Entry Text="{Binding Position}" Placeholder="Должность" HorizontalOptions="StartAndExpand" WidthRequest="350"/>
+            <StackLayout Orientation="Horizontal" x:Name="check">
+                <CheckBox CheckedChanged="CheckBox_CheckedChanged" x:Name="checkbox"/>
+                <Label Text="Поменять логин, пароль, права доступа"/>
+            </StackLayout>
+            <Label Text="Права доступа: "/>
+            <Picker Title="Права доступа:" x:Name="picker" Margin="0,0,0,50">
+                <Picker.Items>
+                    <x:String>Работник</x:String>
+                    <x:String>Смотритель</x:String>
+                    <x:String>Администратор</x:String>
+                </Picker.Items>
+            </Picker>
+            <Entry Text="{Binding Login}" Placeholder="Логин" HorizontalOptions="StartAndExpand" WidthRequest="350" x:Name="Login"/>
+            <Entry Text="{Binding Password}" Placeholder="Пароль" HorizontalOptions="StartAndExpand" WidthRequest="350" x:Name="Password" IsPassword="True"/>
+            <Button Text="Сохранить" Clicked="SaveButtonClicked"/>
+            <Button Text="Удалить" Clicked="DeleteButtonClicked" x:Name="deleteb"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 x:Class="VKR.Views.Admin.Employeers"
+             Title="Работники">
+    <StackLayout Orientation="Vertical" Spacing="5">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="125" />
+                <ColumnDefinition Width="125" />
+                <ColumnDefinition Width="125" />
+            </Grid.ColumnDefinitions>
+            <Label Text="ФИО"
+							HorizontalOptions="Center"
+							VerticalOptions="Center" />
+            <Label Grid.Column ="1"
+							Text="Должность"
+							HorizontalOptions="Center"
+							VerticalOptions="Center" />
+            <Label Grid.Column ="2"
+							Text="Права доступа"
+							HorizontalOptions="Center"
+							VerticalOptions="Center" />
+        </Grid>
+        <CollectionView SelectionMode="Single"
+				SelectionChanged="CollectionView_SelectionChanged"
+				x:Name="collView">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="125" />
+                            <ColumnDefinition Width="125" />
+                            <ColumnDefinition Width="125" />
+                        </Grid.ColumnDefinitions>
+                        <Label Text="{Binding FIO}"
+								HorizontalOptions="Center"
+								VerticalOptions="Center" />
+                        <Label Grid.Column ="1"
+								Text="{Binding Position}"
+								HorizontalOptions="Center"
+								VerticalOptions="Center" />
+                        <Label Grid.Column ="2"
+								Text="{Binding wt_str}"
+								HorizontalOptions="Center"
+								VerticalOptions="Center" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Button Text="Добавить" Clicked="AddToolbar_Clicked" VerticalOptions="End"/>
+    </StackLayout>
+</ContentPage>
