@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using VKR.Models.Admin;
+using VKR.Models.Watcher;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -12,6 +13,9 @@ namespace VKR
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class AppShell : Shell
 	{
+		public Group group;
+		public WatchWorker employee_info;
+
 		public AppShell()
 		{
 			InitializeComponent();
@@ -32,19 +36,20 @@ namespace VKR
 						ShellSection shellSection = new ShellSection();
 						ShellSection shellSection1 = new ShellSection();
 						ShellSection shellSection2 = new ShellSection();
-						shellSection.Title = "Shedule";
-						shellSection1.Title = "Map";
-						shellSection2.Title = "About me";
-
+						shellSection.Title = "Расписание";
+						shellSection1.Title = "Карта";
+						shellSection2.Title = "Информация о работнике";
+						employee_info = App.DataBase.GetEmployee();
+						group = new Models.Admin.Group(employee_info.wgi, employee_info.WorkGroup);
 						shellSection.Items.Add(new ShellContent()
 						{
-							Content = new VKR.Views.Worker.Shedule(),
+							Content = new VKR.Views.Admin.TimeShedule(ref group),
 							Route = nameof(Views.Worker.Shedule)
 						});
 
 						shellSection1.Items.Add(new ShellContent()
 						{
-							//Заглушка на конструктор карты
+
 							Content = new VKR.Views.Worker.Map(),
 							Route = nameof(Views.Worker.Map)
 						});
@@ -52,15 +57,15 @@ namespace VKR
 						shellSection2.Items.Add(new ShellContent()
 						{
 							//Заглушка на конструктор информации о пользователе
-							Content = new VKR.Views.Worker.MyInformation(),
-							Route = nameof(Views.Worker.MyInformation)
+							Content = new VKR.Views.Watcher.PersonData(employee_info),
+							Route = nameof(Views.Watcher.PersonData)
 						});
 
 						myshell.Items.Add(shellSection);
 						myshell.Items.Add(shellSection1);
 						myshell.Items.Add(shellSection2);
 						myshell.Items.Add(logoutmenu);
-						myshell.CurrentItem = shellSection;
+						myshell.CurrentItem = shellSection2;
 						break;
 					}
 

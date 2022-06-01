@@ -81,9 +81,6 @@ namespace VKR.Models.Admin
 		{
 			this.GroupId = NumberOfGroup;
 			this.NameOfGroup = NameOfGroup;
-			//Заглушка на расписание
-			//Заглушка на пользователей
-			//Заглушка на маркеры
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

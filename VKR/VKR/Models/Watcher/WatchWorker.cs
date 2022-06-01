@@ -32,11 +32,12 @@ namespace VKR.Models.Watcher
 	public class WatchWorker : INotifyPropertyChanged
 	{
 		[JsonConstructor]
-		public WatchWorker(int id, string fio, string position, string workGroup, int numberOfAbsence, TimeSpan sumTime) 
+		public WatchWorker(int id, string fio, string position, int wgi, string workGroup, int numberOfAbsence, TimeSpan sumTime) 
 		{
 			this.id = id;
 			this.FIO = fio;
 			this.Position = position;
+			this.wgi = wgi;
 			this.WorkGroup = workGroup;
 			this.NumberOfAbsence = numberOfAbsence;
 			this.SumTimeOfAbsence = sumTime.ToString();
@@ -56,6 +57,7 @@ namespace VKR.Models.Watcher
 				{
 					FIO = dr["ФИО"] as string;
 					Position = dr["Должность"] as string;
+					wgi = (int)dr["work_group_id"];
 					WorkGroup = dr["Название подразделения"] as string;
 					NumberOfAbsence = (int)dr["Количество пропусков"];
 					SumTimeOfAbsence = ((TimeSpan)dr["Время пропусков"]).ToString();
@@ -74,6 +76,7 @@ namespace VKR.Models.Watcher
 		public string WorkGroup { get { return _WorkGroup; } set { _WorkGroup = value; OnPropertyChanged("WorkGroup"); } }
 		public int NumberOfAbsence { get { return _NumberOfAbsence; } set { _NumberOfAbsence = value; OnPropertyChanged("NumberOfAbsence"); } }
 		public string SumTimeOfAbsence { get { return _SumTimeOfAbsence; } set { _SumTimeOfAbsence = value; OnPropertyChanged("SumTimeOfAbsence"); } }
+		public int wgi { get { return _WGI; } set { _WGI = value; OnPropertyChanged("wgi"); } }
 
 		private ObservableCollection<Worker_skip> _skip_list { get; set; }
 		private Xamarin.Forms.SelectionMode _dlt_rows { get; set; }
@@ -83,6 +86,7 @@ namespace VKR.Models.Watcher
 		private string _WorkGroup { get; set; }
 		private int _NumberOfAbsence { get; set; }
 		private string _SumTimeOfAbsence { get; set; }
+		private int _WGI { get; set; }
 
 		public event PropertyChangedEventHandler PropertyChanged;
 		protected void OnPropertyChanged(string propName)

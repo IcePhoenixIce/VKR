@@ -51,6 +51,8 @@ namespace VKR.Views.Watcher
 
         private async void CollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+			if (aboutWorker.id == App.DataBase.emp_id)
+				return;
 			var ans = await DisplayAlert("Удаление записи", "Вы уверены, что данный пропуск был совершен на законных причинах", "Да", "Нет");
 			if (ans == true)
             {

@@ -54,6 +54,6 @@
 				</DataTemplate>
 			</CollectionView.ItemTemplate>
 		</CollectionView>
-        <Button Text="Добавить" Clicked="AddToolbar_Clicked" VerticalOptions="End"/>
+        <Button Text="Добавить" Clicked="AddToolbar_Clicked" VerticalOptions="End" x:Name="addTimeTableButton"/>
     </StackLayout>
 </ContentPage>

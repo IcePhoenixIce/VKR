@@ -18,6 +18,7 @@ namespace VKR.Data
 	{
 		public WorkerType wtype;
 		public int emp_id;
+		public int work_group;
 		public MySqlConnection connection = new MySqlConnection();
 
 		public DataBase() { wtype = WorkerType.NoAuth; }
@@ -81,6 +82,7 @@ namespace VKR.Data
 						return false;
 				}
 				dr.Close();
+
 				return true;
 			}
 			dr.Close();
@@ -99,7 +101,7 @@ namespace VKR.Data
 				MySqlDataReader dr = cmd.ExecuteReader();
 				while (dr.Read())
 				{
-					lww.Add(new WatchWorker((int)dr["emp_id"], dr["ФИО"] as string, dr["Должность"] as string, dr["Название подразделения"] as string, (int)dr["Количество пропусков"], (TimeSpan)dr["Время пропусков"]));
+					lww.Add(new WatchWorker((int)dr["emp_id"], dr["ФИО"] as string, dr["Должность"] as string, (int)dr["work_group_id"], dr["Название подразделения"] as string, (int)dr["Количество пропусков"], (TimeSpan)dr["Время пропусков"]));
 				}
 				dr.Close();
 				foreach (WatchWorker ww in lww) 
@@ -251,7 +253,7 @@ namespace VKR.Data
 			{
 				if (employee.id == -1)
 				{
-					string query = $"INSERT INTO `employee` VALUES (NULL, '{employee.FIO}', '{employee.Position}','{groupId}');";
+					string query = $"INSERT INTO `employee` VALUES (NULL, '{employee.FIO}', '{employee.Position}','{groupId}', NULL);";
 					MySqlCommand cmd = new MySqlCommand(query, connection);
 					cmd.ExecuteNonQuery();
 					query = $"SELECT `emp_id` FROM `employee` WHERE emp_fio = '{employee.FIO}' AND emp_pos = '{employee.Position}' AND `work_group_id` = '{groupId}';";
@@ -338,6 +340,27 @@ namespace VKR.Data
 				return true;
 			}
 			return false;
+		}
+
+		public WatchWorker GetEmployee()
+		{
+			string query = $"SELECT * FROM watcher_all WHERE emp_id = {emp_id}";
+			WatchWorker res = null;
+
+			if (this.connection.State == System.Data.ConnectionState.Open)
+			{
+				MySqlCommand cmd = new MySqlCommand(query, this.connection);
+				MySqlDataReader dr = cmd.ExecuteReader();
+				while (dr.Read())
+				{
+					res = new WatchWorker((int)dr["emp_id"], dr["ФИО"] as string, dr["Должность"] as string, (int)dr["work_group_id"], dr["Название подразделения"] as string, (int)dr["Количество пропусков"], (TimeSpan)dr["Время пропусков"]);
+				}
+				dr.Close();
+				res.skip_list = GetWatcher_Data_Person(emp_id);
+			}
+			else
+				App.Current.MainPage.DisplayAlert("Ошибка подключения", "Невозможно установить соединение с БД, проверьте связь", "Ок");
+			return res;
 		}
 	}
 }

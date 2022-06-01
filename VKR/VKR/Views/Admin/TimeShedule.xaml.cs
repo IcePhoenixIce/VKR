@@ -45,6 +45,8 @@ namespace VKR.Views.Admin
 			group.LS = App.DataBase.GetShedules(group.GroupId);
 			this.group = group;
 			InitializeComponent();
+			if (App.DataBase.wtype == WorkerType.Worker)
+				addTimeTableButton.IsVisible = addTimeTableButton.IsEnabled = false;
 			collView.SetBinding(ItemsView.ItemsSourceProperty, nameof(this.group.LS));
 		}
 
@@ -57,12 +59,16 @@ namespace VKR.Views.Admin
 
 		private async void AddToolbar_Clicked(object sender, EventArgs e)
 		{
+			if (App.DataBase.wtype == WorkerType.Worker)
+				return;
 			VKR.Models.Admin.Shedule s = new VKR.Models.Admin.Shedule();
 			await Navigation.PushAsync(new TimeCreate(ref s, group.GroupId));
 		}
 
 		private async void CollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
+			if (App.DataBase.wtype == WorkerType.Worker)
+				return;
 			if (e.CurrentSelection != null)
 			{
 				VKR.Models.Admin.Shedule shedule = e.CurrentSelection.FirstOrDefault() as VKR.Models.Admin.Shedule;
