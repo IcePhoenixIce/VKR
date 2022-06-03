@@ -82,7 +82,8 @@ namespace VKR.Data
 						return false;
 				}
 				dr.Close();
-
+				App.Current.Properties["login"] = login;
+				App.Current.Properties["password"] = password;
 				return true;
 			}
 			dr.Close();

@@ -6,10 +6,20 @@ using Android.Runtime;
 using Android.OS;
 using Android;
 using Android.Content;
+using Shiny;
 
 namespace VKR.Droid
 {
-    [Activity(Label = "VKR", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize )]
+    [Activity(
+        Label = "VKR",
+        Icon = "@mipmap/icon",
+        Theme = "@style/MainTheme",
+        MainLauncher = true,
+        ConfigurationChanges = ConfigChanges.ScreenSize |
+        ConfigChanges.Orientation |
+        ConfigChanges.UiMode |
+        ConfigChanges.ScreenLayout |
+        ConfigChanges.SmallestScreenSize )]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         const int RequestLocationId = 0;
@@ -18,12 +28,15 @@ namespace VKR.Droid
         {
             Manifest.Permission.AccessCoarseLocation,
             Manifest.Permission.AccessFineLocation,
-            Manifest.Permission.AccessBackgroundLocation
+            Manifest.Permission.AccessBackgroundLocation,
+            Manifest.Permission.ForegroundService,
+            Manifest.Permission.AccessNetworkState,
+            Manifest.Permission.WriteExternalStorage
         };
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            //this.ShinyOnCreate();
+            this.ShinyOnCreate();
             base.OnCreate(savedInstanceState);
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
@@ -52,19 +65,19 @@ namespace VKR.Droid
         protected override void OnNewIntent(Intent intent)
         {
             base.OnNewIntent(intent);
-            //this.ShinyOnNewIntent(intent);
+            this.ShinyOnNewIntent(intent);
         }
 
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
             base.OnActivityResult(requestCode, resultCode, data);
-            //this.ShinyOnActivityResult(requestCode, resultCode, data);
+            this.ShinyOnActivityResult(requestCode, resultCode, data);
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-            //this.ShinyOnRequestPermissionsResult(requestCode, permissions, grantResults);
+            this.ShinyOnRequestPermissionsResult(requestCode, permissions, grantResults);
             if (requestCode == RequestLocationId)
             {
                 if ((grantResults.Length == 1) && (grantResults[0] == (int)Permission.Granted))

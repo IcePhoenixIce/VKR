@@ -4,9 +4,10 @@
              x:Class="VKR.Views.Worker.Map">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
+            <Label Text="{Binding counter}"
                 VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+                HorizontalOptions="CenterAndExpand"
+                   x:Name="textlabel"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
