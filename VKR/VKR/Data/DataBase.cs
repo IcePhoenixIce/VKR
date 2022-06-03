@@ -7,6 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using MySqlConnector;
 using Newtonsoft.Json;
+using Shiny;
+using Shiny.Locations;
+using Shiny.Notifications;
 using VKR.Models;
 using VKR.Models.Admin;
 using VKR.Models.Watcher;
@@ -57,7 +60,7 @@ namespace VKR.Data
 					return false;
 			MySqlCommand command = new MySqlCommand($"SELECT emp_id, mobile_status FROM auth_table WHERE login = '{login}' AND SHA1(SHA1(PASSWORD)) = '{Hash(Hash(password))}'", connection);
 			MySqlDataReader dr = command.ExecuteReader();
-			while (dr.Read())
+			if (dr.Read())
 			{
 				emp_id = (int)dr["emp_id"];
 				switch ((string)dr["mobile_status"])
@@ -84,6 +87,9 @@ namespace VKR.Data
 				dr.Close();
 				App.Current.Properties["login"] = login;
 				App.Current.Properties["password"] = password;
+				string query = $"SELECT work_group_id FROM employee WHERE emp_id = {emp_id};";
+				command = new MySqlCommand(query, connection);
+				work_group = (int)command.ExecuteScalar();
 				return true;
 			}
 			dr.Close();
@@ -362,6 +368,65 @@ namespace VKR.Data
 			else
 				App.Current.MainPage.DisplayAlert("Ошибка подключения", "Невозможно установить соединение с БД, проверьте связь", "Ок");
 			return res;
+		}
+
+		//INSERT INTO `watcher_table` (`id`, `date_time`, `emp_id`, `marker_id`, `inside`) VALUES (NULL, CURRENT_TIMESTAMP, '3', '6', '1')
+		public bool AddWatcherTable(int marker_id, bool inside) 
+		{
+
+			if (connection.State == System.Data.ConnectionState.Open)
+			{
+				string query = $"INSERT INTO `watcher_table` VALUES (NULL, CURRENT_TIMESTAMP, '{emp_id}', '{marker_id}', '{Convert.ToInt32(inside)}');";
+				MySqlCommand cmd = new MySqlCommand(query, connection);
+				cmd.ExecuteNonQuery();
+				return true;
+			}
+			return false;
+		}
+		public bool InWorkTime()
+		{
+			if (connection.State == System.Data.ConnectionState.Open)
+			{
+				string query = $"SELECT COUNT(id) FROM `time_table` WHERE week_day = WEEKDAY(CURDATE()) AND TIMEDIFF(CURTIME(), time_start)>0 AND TIMEDIFF(CURTIME(), time_end)<0 AND work_group_id = {work_group};";
+				MySqlCommand cmd = new MySqlCommand(query, connection);
+				return (int)cmd.ExecuteScalar() > 0;
+			}
+			return false;
+		}
+
+		public async Task<bool> AddAllGeofensingAsync() 
+		{
+			var geofenceManager = ShinyHost.Resolve<IGeofenceManager>();
+			var accessgeo = await geofenceManager.RequestAccess();
+			if (accessgeo != AccessState.Available)
+			{
+				return false;
+			}
+			await geofenceManager.StopAllMonitoring();
+			//???
+			var notificationManager = ShinyHost.Resolve<INotificationManager>();
+			var accessnot = await notificationManager.RequestAccess();
+            if (accessnot != AccessState.Available)
+            {
+                return false;
+            }
+
+			ObservableCollection<Marker> markers = GetMarkers(work_group);
+			foreach (Marker marker in markers) 
+			{
+				var geozone = new GeofenceRegion(
+					marker.uid.ToString(),
+					new Shiny.Locations.Position(marker.pin.Position.Latitude, marker.pin.Position.Longitude),
+					Shiny.Distance.FromMeters(marker.circle.Radius.Meters)
+					)
+				{
+					NotifyOnEntry = true,
+					NotifyOnExit = true,
+					SingleUse = false
+				};
+				await geofenceManager.StartMonitoring(geozone);
+			}
+			return true;
 		}
 	}
 }

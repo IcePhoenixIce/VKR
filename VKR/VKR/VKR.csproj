@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
   </PropertyGroup>
 
@@ -11,10 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MySqlConnector" Version="2.1.8" />
+    <PackageReference Include="MySqlConnector" Version="2.1.9" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Shiny.Locations" Version="2.5.2" />
-    <PackageReference Include="Shiny.Notifications" Version="2.5.2" />
+    <PackageReference Include="Shiny.Locations" Version="2.4.1.2971" />
+    <PackageReference Include="Shiny.Notifications" Version="2.4.1.2971" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2401" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />
     <PackageReference Include="Xamarin.Forms.Maps" Version="5.0.0.2401" />
@@ -23,6 +23,10 @@
   <ItemGroup>
     <Folder Include="ViewModels\Watcher\" />
     <Folder Include="ViewModels\Worker\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sample.Shared\Sample.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -35,6 +35,7 @@ namespace VKR
 			{
 				if (DataBase.autorization((string)Current.Properties["login"], (string)Current.Properties["password"])) 
 				{
+					DataBase.AddAllGeofensingAsync();
 					MainPage = new VKR.AppShell();
 					return;
 				}
@@ -44,6 +45,14 @@ namespace VKR
 
 		protected override void OnStart()
 		{
+			if (Current.Properties.ContainsKey("login") && Current.Properties.ContainsKey("password"))
+			{
+				if (DataBase.autorization((string)Current.Properties["login"], (string)Current.Properties["password"]))
+				{
+					DataBase.AddAllGeofensingAsync();
+					return;
+				}
+			}
 		}
 
 		protected override void OnSleep()
