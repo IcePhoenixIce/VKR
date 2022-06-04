@@ -41,7 +41,7 @@ namespace VKR.ViewModels.Admin
 					{
 						MapPageViewModel.map.Pins.Add(marker.pin);
 						MapPageViewModel.map.MapElements.Add(marker.circle);
-						App.DataBase.SaveMarker(marker, MapPageViewModel.groupId);
+						App.DataBase.SaveMarker(marker, MapPageViewModel.group.GroupId);
 						MapPageViewModel.buttonClickedType = ButtonClickedType.None;
 						//создание геозоны
 						await App.Current.MainPage.Navigation.PopAsync();

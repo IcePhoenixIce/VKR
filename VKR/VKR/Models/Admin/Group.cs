@@ -48,12 +48,18 @@ namespace VKR.Models.Admin
 		public string Password { get; set; }
 		public WorkerType wt { get; set; }
 		public string wt_str { get { return wt.ToString(); } }
-		public Employee(int id, string FIO, string Position, string wt)
+
+		public Xamarin.Essentials.Location location { get; set; }
+		public Employee(int id, string FIO, string Position, string wt, string location)
 		{
 			this.id = id;
 			this.FIO = FIO;
 			this.Position = Position;
 			this.wt = (WorkerType)Enum.Parse(typeof(WorkerType), wt);
+			if (location == "null" || location == "NULL")
+				this.location = null;
+			else
+				this.location = Newtonsoft.Json.JsonConvert.DeserializeObject<Xamarin.Essentials.Location>(location);
 		}
 		public Employee()
 		{

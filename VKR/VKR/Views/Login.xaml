@@ -15,11 +15,11 @@
 
     <ContentPage.Content>
         <StackLayout Orientation="Vertical">
-            <Entry Placeholder="Login" WidthRequest="400" Margin="40,100,40,20" VerticalOptions="Center" HorizontalOptions="StartAndExpand" 
+            <Entry Placeholder="Логин" WidthRequest="400" Margin="40,100,40,20" VerticalOptions="Center" HorizontalOptions="StartAndExpand" 
                    Text="{Binding Login}"/>
-            <Entry Placeholder="Password" IsPassword="True" WidthRequest="400" Margin="40" VerticalOptions="Center" HorizontalOptions="StartAndExpand"
+            <Entry Placeholder="Пароль" IsPassword="True" WidthRequest="400" Margin="40" VerticalOptions="Center" HorizontalOptions="StartAndExpand"
                    Text="{Binding Password}"/>
-            <Button Text="Log In" Margin="20" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"
+            <Button Text="Войти" Margin="20" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"
                     Command="{Binding LoginCommand}"/>
         </StackLayout>
     </ContentPage.Content>

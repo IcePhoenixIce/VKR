@@ -18,7 +18,7 @@ namespace VKR.Views.Admin
         {
             InitializeComponent();
             MapPageViewModel.map = MyMap;
-            MapPageViewModel.groupId = group.GroupId;
+            MapPageViewModel.group = group;
             this.BindingContext = new MapPageViewModel();
         }
     }

@@ -13,7 +13,8 @@ using Shiny.Notifications;
 using VKR.Models;
 using VKR.Models.Admin;
 using VKR.Models.Watcher;
-
+using VKR.Models.Worker;
+using Xamarin.Essentials;
 
 namespace VKR.Data
 {
@@ -22,9 +23,11 @@ namespace VKR.Data
 		public WorkerType wtype;
 		public int emp_id;
 		public int work_group;
+		public bool inWorkTimeBool;
+		private GeoTimer geoTimer;
 		public MySqlConnection connection = new MySqlConnection();
 
-		public DataBase() { wtype = WorkerType.NoAuth; }
+		public DataBase() { geoTimer = new GeoTimer(); wtype = WorkerType.NoAuth; }
 
 		static string Hash(string input)
 		{
@@ -90,6 +93,14 @@ namespace VKR.Data
 				string query = $"SELECT work_group_id FROM employee WHERE emp_id = {emp_id};";
 				command = new MySqlCommand(query, connection);
 				work_group = (int)command.ExecuteScalar();
+				Xamarin.Forms.Device.StartTimer(TimeSpan.FromMinutes(1), () =>
+				{
+					inWorkTimeBool = App.DataBase.InWorkTime();
+					return wtype != WorkerType.NoAuth;
+				});
+				geoTimer.StopTimer();
+				geoTimer.StartTimer();
+				InWorkTime();
 				return true;
 			}
 			dr.Close();
@@ -246,7 +257,8 @@ namespace VKR.Data
 				MySqlDataReader dr = cmd.ExecuteReader();
 				while (dr.Read())
 				{
-					le.Add(new Employee((int)dr["emp_id"], (string)dr["emp_fio"], (string)dr["emp_pos"], (string)dr["mobile_status"]));
+					string pos = dr["Position"] == System.DBNull.Value ? "NULL" : (string)dr["Position"];
+					le.Add(new Employee((int)dr["emp_id"], (string)dr["emp_fio"], (string)dr["emp_pos"], (string)dr["mobile_status"], pos));
 				}
 				dr.Close();
 			}
@@ -389,7 +401,7 @@ namespace VKR.Data
 			{
 				string query = $"SELECT COUNT(id) FROM `time_table` WHERE week_day = WEEKDAY(CURDATE()) AND TIMEDIFF(CURTIME(), time_start)>0 AND TIMEDIFF(CURTIME(), time_end)<0 AND work_group_id = {work_group};";
 				MySqlCommand cmd = new MySqlCommand(query, connection);
-				return (int)cmd.ExecuteScalar() > 0;
+				return (int)(long)(cmd.ExecuteScalar()) > 0;
 			}
 			return false;
 		}
@@ -427,6 +439,17 @@ namespace VKR.Data
 				await geofenceManager.StartMonitoring(geozone);
 			}
 			return true;
+		}
+
+		public bool addPosition(Location location) 
+		{
+			if (connection.State == System.Data.ConnectionState.Open)
+			{
+				string query = $"UPDATE `employee` SET `Position` = '{JsonConvert.SerializeObject(location)}'  WHERE `emp_id` = {emp_id};";
+				MySqlCommand cmd = new MySqlCommand(query, connection);
+				cmd.ExecuteNonQueryAsync();
+			}
+			return false;
 		}
 	}
 }

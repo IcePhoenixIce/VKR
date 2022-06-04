@@ -15,14 +15,14 @@
 				IsShowingUser="true"
 				MapType="Street" />
             <StackLayout Orientation="Horizontal" Margin="10">
-                <Button Text="Add pin"
+                <Button Text="Добавить"
 				Command="{Binding AddPin}"
 				HorizontalOptions="StartAndExpand"
 					x:Name="button1"/>
-                <Button Text="Change pin"
+                <Button Text="Изменить"
 				Command="{Binding ChangePin}"
 					HorizontalOptions="CenterAndExpand"/>
-                <Button Text="Remove pin"
+                <Button Text="Удалить"
 				Command="{Binding DeletePin}"
 					HorizontalOptions="EndAndExpand"/>
             </StackLayout>

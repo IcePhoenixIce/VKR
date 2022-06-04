@@ -1,11 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="VKR.Views.Worker.Map"             
+             x:Class="VKR.Views.Watcher.MapPageGroup"
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
-             Title="Карта работника">
+             Title="Карта">
     <ContentPage.Content>
         <StackLayout>
+            <Picker 
+                Title="Выберите рабочую группу"
+                TitleColor="White"
+                ItemsSource="{Binding LG}"
+                ItemDisplayBinding="{Binding NameOfGroup}"
+                SelectedItem="{Binding SelectedGroup}"
+                SelectedIndexChanged="Picker_SelectedIndexChanged"
+                x:Name="picker1"/>
             <maps:Map
 				x:Name="MyMap"
 				IsShowingUser="true"

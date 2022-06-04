@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Windows.Input;
 using VKR.Models;
+using VKR.Models.Admin;
 using VKR.Views.Admin;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
@@ -32,19 +33,19 @@ namespace VKR.ViewModels.Admin
 				= map.HasZoomEnabled
 				= map.HasScrollEnabled
 				= true;
+			if (group.LE == null || group.LE.Count == 0)
+				App.DataBase.GetAdminWorkers(group.GroupId);
 			map.MapClicked += Map_MapClicked;
 			map.PropertyChanged += Map_PropertyChanged;
 			if (Application.Current.Properties.ContainsKey("currentMapPosition"))
 				map.MoveToRegion(JsonConvert.DeserializeObject<MapSpan>((string)Application.Current.Properties["currentMapPosition"]));
-			mlist = App.DataBase.GetMarkers(groupId);
+			mlist = App.DataBase.GetMarkers(group.GroupId);
 			foreach (Marker marker in mlist) 
 			{
 				marker.pin.MarkerClicked += Pin_MarkerClicked;
 				map.Pins.Add(marker.pin);
 				map.MapElements.Add(marker.circle);
-				//заглушка на shiny
 			}
-
 
 			this.AddPin = new Command(async () =>
 			{
@@ -110,8 +111,8 @@ namespace VKR.ViewModels.Admin
 				m.pin.MarkerClicked += Pin_MarkerClicked;
 				map.Pins.Add(m.pin);
 				map.MapElements.Add(m.circle);
-				App.DataBase.SaveMarker(m, groupId);
-				mlist = App.DataBase.GetMarkers(groupId);
+				App.DataBase.SaveMarker(m, group.GroupId);
+				mlist = App.DataBase.GetMarkers(group.GroupId);
 				//заглушка
 				//создание региона
 				m = null;
@@ -125,7 +126,7 @@ namespace VKR.ViewModels.Admin
 		public ICommand DeletePin { get; }
 
 		public static Marker m;
-		public static int groupId { get; set; }
+		public static Models.Admin.Group group { get; set; }
 		public static Map map { get; set; }
 		public ObservableCollection<Marker> mlist { get; set; }
 		public static ButtonClickedType buttonClickedType { get; set; }

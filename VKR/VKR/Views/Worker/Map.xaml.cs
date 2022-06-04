@@ -1,41 +1,42 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using VKR.Models;
+using VKR.Models.Admin;
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
 using Xamarin.Forms.Xaml;
 
 namespace VKR.Views.Worker
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class Map : ContentPage, INotifyPropertyChanged
+    public partial class Map : ContentPage
     {
-        public int counter { get { return _counter; } set { _counter = value; OnPropertyChanged("counter"); } }
-        int _counter;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propName)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propName));
-        }
+        
         public Map()
         {
+            LM = App.DataBase.GetMarkers(App.DataBase.work_group);
             InitializeComponent();
-            Xamarin.Forms.Device.StartTimer(TimeSpan.FromSeconds(1), () =>
+            if (Application.Current.Properties.ContainsKey("currentMapPosition3"))
+                MyMap.MoveToRegion(JsonConvert.DeserializeObject<MapSpan>((string)Application.Current.Properties["currentMapPosition3"]));
+            foreach (Marker marker in LM)
             {
-                counter++;
-                return counter <= 1000;
-            });
+                MyMap.Pins.Add(marker.pin);
+                MyMap.MapElements.Add(marker.circle);
+            }
         }
 
-        protected override void OnAppearing()
+        private void Map_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            base.OnAppearing();
-            this.BindingContext = this;
+            if (MyMap.VisibleRegion != null)
+                Application.Current.Properties["currentMapPosition3"] = JsonConvert.SerializeObject(new MapSpan(MyMap.VisibleRegion.Center, MyMap.VisibleRegion.LatitudeDegrees, MyMap.VisibleRegion.LongitudeDegrees));
         }
+
+        public IList<Marker> LM { get; set; }
     }
 }
