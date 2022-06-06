@@ -28,6 +28,22 @@ namespace VKR.Views.Watcher
 
 		private void Picker_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			RefreshData();
+			Device.StartTimer(TimeSpan.FromMinutes(1), () =>
+			{
+				RefreshData();
+				return flag;
+			});
+		}
+
+		private void Map_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (MyMap.VisibleRegion != null)
+				Application.Current.Properties["currentMapPosition2"] = JsonConvert.SerializeObject(new MapSpan(MyMap.VisibleRegion.Center, MyMap.VisibleRegion.LatitudeDegrees, MyMap.VisibleRegion.LongitudeDegrees));
+		}
+
+		private void RefreshData() 
+		{
 			MyMap.Pins.Clear();
 			MyMap.MapElements.Clear();
 			SelectedGroup.LM = App.DataBase.GetMarkers(SelectedGroup.GroupId);
@@ -50,16 +66,25 @@ namespace VKR.Views.Watcher
 			}
 		}
 
-		private void Map_PropertyChanged(object sender, PropertyChangedEventArgs e)
-		{
-			if (MyMap.VisibleRegion != null)
-				Application.Current.Properties["currentMapPosition2"] = JsonConvert.SerializeObject(new MapSpan(MyMap.VisibleRegion.Center, MyMap.VisibleRegion.LatitudeDegrees, MyMap.VisibleRegion.LongitudeDegrees));
-		}
-
 		public Group SelectedGroup { get { return _selectedGroup; } set { _selectedGroup = value; } }
 
 		static Group _selectedGroup { get; set; }
 
-		public IList<Group> LG { get; set; }
-	}
+		public ObservableCollection<Group> LG { get; set; }
+
+		private bool flag;
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+			flag = true;
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+			flag = false;
+
+        }
+    }
 }
