@@ -34,7 +34,7 @@ namespace VKR
 			//Отправка данных в table_watcher
 			App.DataBase.AddWatcherTable(Convert.ToInt32(region.Identifier), inside);
 			//Чтение данных о рабочем расписании в текущий день недели SQL, если рабочее время то в случае выхода из рабочей зоны, отправляем уведомление с предупреждением.
-			if (!inside && App.DataBase.InWorkTime()) 
+			if (!inside && App.DataBase.inWorkTimeBool) 
 			{
 				await this.notificationManager.Send(
 				"Предупреждение!",

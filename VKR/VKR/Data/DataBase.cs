@@ -85,6 +85,7 @@ namespace VKR.Data
 						break;
 					default:
 						dr.Close();
+						connection.Close();
 						return false;
 				}
 				dr.Close();
@@ -93,6 +94,7 @@ namespace VKR.Data
 				string query = $"SELECT work_group_id FROM employee WHERE emp_id = {emp_id};";
 				command = new MySqlCommand(query, connection);
 				work_group = (int)command.ExecuteScalar();
+				connection.Close();
 				Xamarin.Forms.Device.StartTimer(TimeSpan.FromMinutes(1), () =>
 				{
 					inWorkTimeBool = App.DataBase.InWorkTime();
@@ -100,11 +102,11 @@ namespace VKR.Data
 				});
 				geoTimer.StopTimer();
 				geoTimer.StartTimer();
-				InWorkTime();
 				return true;
 			}
 			dr.Close();
 			wtype = WorkerType.NoAuth;
+			connection.Close();
 			return false;
 		}
 
@@ -112,7 +114,7 @@ namespace VKR.Data
 		{
 			ObservableCollection<WatchWorker> lww = new ObservableCollection<WatchWorker>();
 			string query = "SELECT * FROM watcher_all";
-
+			connection.Open();
 			if (this.connection.State == System.Data.ConnectionState.Open) 
 			{
 				MySqlCommand cmd = new MySqlCommand(query, this.connection);
@@ -122,6 +124,7 @@ namespace VKR.Data
 					lww.Add(new WatchWorker((int)dr["emp_id"], dr["ФИО"] as string, dr["Должность"] as string, (int)dr["work_group_id"], dr["Название подразделения"] as string, (int)dr["Количество пропусков"], (TimeSpan)dr["Время пропусков"]));
 				}
 				dr.Close();
+				connection.Close();
 				foreach (WatchWorker ww in lww) 
 				{
 					ww.skip_list = GetWatcher_Data_Person(ww.id);
@@ -129,11 +132,14 @@ namespace VKR.Data
 			}
 			else
 				App.Current.MainPage.DisplayAlert("Ошибка подключения", "Невозможно установить соединение с БД, проверьте связь", "Ок");
+			if(connection.State == System.Data.ConnectionState.Open)
+				connection.Close();
 			return lww;
 		}
 		public ObservableCollection<Worker_skip> GetWatcher_Data_Person(int id) 
 		{
 			ObservableCollection<Worker_skip> skip_list = new ObservableCollection<Worker_skip>();
+			connection.Open();
 			if (connection.State == System.Data.ConnectionState.Open)
 			{
 				string query = $"SELECT * FROM watcher_table_skip WHERE emp_id = {id}";
@@ -145,17 +151,21 @@ namespace VKR.Data
 			}
 			else
 				App.Current.MainPage.DisplayAlert("Ошибка подключения", "Невозможно установить соединение с БД, проверьте связь", "Ок");
+			connection.Close();
 			return skip_list;
 		}
 		public bool DeleteWTS(int skip_id) 
 		{
+			connection.Open();
 			if (connection.State == System.Data.ConnectionState.Open)
 			{
 				string query = $"Delete FROM watcher_table_skip WHERE id = {skip_id}";
 				MySqlCommand cmd = new MySqlCommand(query, connection);
 				cmd.ExecuteNonQuery();
+				connection.Close();
 				return true;
 			}
+			connection.Close();
 			return false;
 		}
 
@@ -163,6 +173,7 @@ namespace VKR.Data
 		{
 			ObservableCollection<Group> Lg = new ObservableCollection<Group>();
 			string query = "SELECT * FROM work_group_name";
+			connection.Open();
 			if (this.connection.State == System.Data.ConnectionState.Open)
 			{
 				MySqlCommand cmd = new MySqlCommand(query, this.connection);
@@ -175,35 +186,43 @@ namespace VKR.Data
 			}
 			else
 				App.Current.MainPage.DisplayAlert("Ошибка подключения", "Невозможно установить соединение с БД, проверьте связь", "Ок");
+			connection.Close();
 			return Lg;
 
 		}
 		public bool SaveGroup(string groupName, int groupId = -1)
 		{
+			connection.Open();
 			if (connection.State == System.Data.ConnectionState.Open)
 			{
 				string query = (groupId != - 1) ? $"UPDATE `work_group_name` SET `group_name` = '{groupName}' WHERE `work_group_id` = {groupId}" : $"INSERT INTO `work_group_name` (`work_group_id`, `group_name`) VALUES (NULL, '{groupName}')";
 				MySqlCommand cmd = new MySqlCommand(query, connection);
 				cmd.ExecuteNonQuery();
+				connection.Close();
 				return true;
 			}
+			connection.Close();
 			return false;
 		}
 		public bool DeleteGroup(int groupId) 
 		{
+			connection.Open();
 			if (connection.State == System.Data.ConnectionState.Open)
 			{
 				string query = $"Delete FROM work_group_name WHERE work_group_id = {groupId}";
 				MySqlCommand cmd = new MySqlCommand(query, connection);
 				cmd.ExecuteNonQuery();
+				connection.Close();
 				return true;
 			}
+			connection.Close();
 			return false;
 		}
 		public ObservableCollection<Shedule> GetShedules(int groupId) 
 		{
 			ObservableCollection<Shedule> ls = new ObservableCollection<Shedule>();
 			string query = $"SELECT * FROM time_table WHERE  work_group_id = {groupId}";
+			connection.Open();
 			if (this.connection.State == System.Data.ConnectionState.Open)
 			{
 				MySqlCommand cmd = new MySqlCommand(query, this.connection);
@@ -216,10 +235,12 @@ namespace VKR.Data
 			}
 			else
 				App.Current.MainPage.DisplayAlert("Ошибка подключения", "Невозможно установить соединение с БД, проверьте связь", "Ок");
+			connection.Close();
 			return ls;
 		}
 		public bool SaveShedule(Shedule shedule, int groupId) 
 		{
+			connection.Open();
 			if (connection.State == System.Data.ConnectionState.Open)
 			{
 				string query = (shedule.id != -1) ? $"UPDATE `time_table` SET `week_day` = '{(int)shedule.weekDay}', `time_start` = '{shedule.time_start_str}',  `time_end` = '{shedule.time_end_str}'  WHERE `id` = {shedule.id}"
@@ -229,12 +250,15 @@ namespace VKR.Data
 				query = $"DROP EVENT IF EXISTS `wg_{groupId}_{(int)shedule.weekDay}`; CREATE DEFINER =`root`@`%` EVENT `wg_{groupId}_{(int)shedule.weekDay}` ON SCHEDULE EVERY 1 WEEK STARTS '2022-04-0{3+((int)shedule.weekDay)} {shedule.time_end_str}' ON COMPLETION PRESERVE ENABLE DO CALL proc_skipt0(1, '{shedule.time_start_str}', '{shedule.time_end_str}')";
 				cmd = new MySqlCommand(query, connection);
 				cmd.ExecuteNonQuery();
+				connection.Close();
 				return true;
 			}
+			connection.Close();
 			return false;
 		}
 		public bool DeleteShedule(Shedule shedule, int groupId) 
 		{
+			connection.Open();
 			if (connection.State == System.Data.ConnectionState.Open)
 			{
 				string query = $"Delete FROM time_table WHERE id = {shedule.id}";
@@ -243,14 +267,17 @@ namespace VKR.Data
 				query = $"DROP EVENT IF EXISTS `wg_{groupId}_{(int)shedule.weekDay}`;";
 				cmd = new MySqlCommand(query, connection);
 				cmd.ExecuteNonQuery();
+				connection.Close();
 				return true;
 			}
+			connection.Close();
 			return false;
 		}
 		public ObservableCollection<Employee> GetAdminWorkers(int groupId)
 		{
 			ObservableCollection<Employee> le = new ObservableCollection<Employee>();
 			string query = $"SELECT * FROM admin_employeers WHERE  work_group_id = {groupId}";
+			connection.Open();
 			if (this.connection.State == System.Data.ConnectionState.Open)
 			{
 				MySqlCommand cmd = new MySqlCommand(query, this.connection);
@@ -264,10 +291,12 @@ namespace VKR.Data
 			}
 			else
 				App.Current.MainPage.DisplayAlert("Ошибка подключения", "Невозможно установить соединение с БД, проверьте связь", "Ок");
+			connection.Close();
 			return le;
 		}
 		public bool SaveEmployee(Employee employee, int groupId)
 		{
+			connection.Open();
 			if (connection.State == System.Data.ConnectionState.Open)
 			{
 				if (employee.id == -1)
@@ -292,28 +321,34 @@ namespace VKR.Data
 					MySqlCommand cmd = new MySqlCommand(query, connection);
 					cmd.ExecuteNonQuery();
 				}
+				connection.Close();
 				return true;
 			}
+			connection.Close();
 			return false;
 		}
 		public bool DeleteEmployee(Employee employee)
 		{
+			connection.Open();
 			if (connection.State == System.Data.ConnectionState.Open)
 			{
 				string query = $"Delete FROM employee WHERE `emp_id` = '{employee.id}'";
 				MySqlCommand cmd = new MySqlCommand(query, connection);
 				cmd.ExecuteNonQuery();
+				connection.Close();
 				return true;
 			}
+			connection.Close();
 			return false;
 		}
 		public ObservableCollection<Marker> GetMarkers(int groupId) 
 		{
 			ObservableCollection<Marker> lm = new ObservableCollection<Marker>();
 			string query = $"SELECT * FROM marker_table WHERE  group_id = {groupId}";
-			if (this.connection.State == System.Data.ConnectionState.Open)
+			connection.Open();
+			if (connection.State == System.Data.ConnectionState.Open)
 			{
-				MySqlCommand cmd = new MySqlCommand(query, this.connection);
+				MySqlCommand cmd = new MySqlCommand(query, connection);
 				MySqlDataReader dr = cmd.ExecuteReader();
 				while (dr.Read())
 				{
@@ -325,12 +360,12 @@ namespace VKR.Data
 			}
 			else
 				App.Current.MainPage.DisplayAlert("Ошибка подключения", "Невозможно установить соединение с БД, проверьте связь", "Ок");
-
-
+			connection.Close();
 			return lm;
 		}
 		public bool SaveMarker(Marker marker, int groupId)
 		{
+			connection.Open();
 			if (connection.State == System.Data.ConnectionState.Open)
 			{
 				if (marker.uid == -1)
@@ -345,19 +380,24 @@ namespace VKR.Data
 					MySqlCommand cmd = new MySqlCommand(query, connection);
 					cmd.ExecuteNonQuery();
 				}
+				connection.Close();
 				return true;
 			}
+			connection.Close();
 			return false;
 		}
 		public bool DeleteMarker(Marker marker)
 		{
+			connection.Open();
 			if (connection.State == System.Data.ConnectionState.Open)
 			{
 				string query = $"Delete FROM `marker_table` WHERE `marker_id` = '{marker.uid}'";
 				MySqlCommand cmd = new MySqlCommand(query, connection);
 				cmd.ExecuteNonQuery();
+				connection.Close();
 				return true;
 			}
+			connection.Close();
 			return false;
 		}
 
@@ -365,7 +405,7 @@ namespace VKR.Data
 		{
 			string query = $"SELECT * FROM watcher_all WHERE emp_id = {emp_id}";
 			WatchWorker res = null;
-
+			connection.Open();
 			if (this.connection.State == System.Data.ConnectionState.Open)
 			{
 				MySqlCommand cmd = new MySqlCommand(query, this.connection);
@@ -375,34 +415,43 @@ namespace VKR.Data
 					res = new WatchWorker((int)dr["emp_id"], dr["ФИО"] as string, dr["Должность"] as string, (int)dr["work_group_id"], dr["Название подразделения"] as string, (int)dr["Количество пропусков"], (TimeSpan)dr["Время пропусков"]);
 				}
 				dr.Close();
+				connection.Close();
 				res.skip_list = GetWatcher_Data_Person(emp_id);
 			}
 			else
 				App.Current.MainPage.DisplayAlert("Ошибка подключения", "Невозможно установить соединение с БД, проверьте связь", "Ок");
+			if(connection.State == System.Data.ConnectionState.Open)
+				connection.Close();
 			return res;
 		}
 
 		//INSERT INTO `watcher_table` (`id`, `date_time`, `emp_id`, `marker_id`, `inside`) VALUES (NULL, CURRENT_TIMESTAMP, '3', '6', '1')
 		public bool AddWatcherTable(int marker_id, bool inside) 
 		{
-
+			connection.Open();
 			if (connection.State == System.Data.ConnectionState.Open)
 			{
 				string query = $"INSERT INTO `watcher_table` VALUES (NULL, CURRENT_TIMESTAMP, '{emp_id}', '{marker_id}', '{Convert.ToInt32(inside)}');";
 				MySqlCommand cmd = new MySqlCommand(query, connection);
 				cmd.ExecuteNonQuery();
+				connection.Close();
 				return true;
 			}
+			connection.Close();
 			return false;
 		}
 		public bool InWorkTime()
 		{
-			if (connection.State == System.Data.ConnectionState.Open)
+			MySqlConnection connection2 = new MySqlConnection($"server=192.168.1.2;port=3306;username=common_user;database=vkrdb");
+			connection2.Open();
+			if (connection2.State == System.Data.ConnectionState.Open)
 			{
 				string query = $"SELECT COUNT(id) FROM `time_table` WHERE week_day = WEEKDAY(CURDATE()) AND TIMEDIFF(CURTIME(), time_start)>0 AND TIMEDIFF(CURTIME(), time_end)<0 AND work_group_id = {work_group};";
-				MySqlCommand cmd = new MySqlCommand(query, connection);
-				return (int)(long)(cmd.ExecuteScalar()) > 0;
+				MySqlCommand cmd = new MySqlCommand(query, connection2);
+				bool buff = (int)(long)(cmd.ExecuteScalar()) > 0;
+				return buff;
 			}
+			connection2.Close();
 			return false;
 		}
 
@@ -443,12 +492,14 @@ namespace VKR.Data
 
 		public bool addPosition(Location location) 
 		{
+			connection.Open();
 			if (connection.State == System.Data.ConnectionState.Open)
 			{
 				string query = $"UPDATE `employee` SET `Position` = '{JsonConvert.SerializeObject(location)}'  WHERE `emp_id` = {emp_id};";
 				MySqlCommand cmd = new MySqlCommand(query, connection);
-				cmd.ExecuteNonQueryAsync();
+				cmd.ExecuteNonQuery();
 			}
+			connection.Close();
 			return false;
 		}
 	}

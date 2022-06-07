@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CS0006: Не удалось найти файл метаданных "..\..\..\..\vs\vs\Common7\IDE\ReferenceAssemblies\Microsoft\Framework\MonoAndroid\v4.4\Mono.Android.Export.dll".
+dotnet_diagnostic.CS0006.severity = none

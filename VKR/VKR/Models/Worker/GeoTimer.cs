@@ -33,8 +33,6 @@ namespace VKR.Models.Worker
                         if (location != null)
                             App.DataBase.addPosition(location);
                     });
-                    int a = 2;
-                    a++;
                 }
                 return timerWork;
             });

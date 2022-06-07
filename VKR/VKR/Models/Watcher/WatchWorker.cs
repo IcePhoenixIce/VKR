@@ -48,7 +48,7 @@ namespace VKR.Models.Watcher
 		public WatchWorker(int id) 
 		{
 			string query = $"SELECT * FROM watcher_all WHERE emp_id = {id}";
-
+			App.DataBase.connection.Open();
 			if (App.DataBase.connection.State == System.Data.ConnectionState.Open)
 			{
 				MySqlCommand cmd = new MySqlCommand(query, App.DataBase.connection);
@@ -64,6 +64,7 @@ namespace VKR.Models.Watcher
 				}
 				dr.Close();
 			}
+			App.DataBase.connection.Close();
 			skip_list = App.DataBase.GetWatcher_Data_Person(this.id);
 			dlt_rows = Xamarin.Forms.SelectionMode.None;
 		}
